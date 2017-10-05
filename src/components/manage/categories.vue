@@ -6,37 +6,40 @@ export default {
   name       : 'categories',
   props      : ['config', 'triggerSet'],
   components : {checkbox},
+  data() {
+    let obj = { alerts:{} }
+    // Create a local object that stores all the values of the checkboxes
+    // so we can bind their value directly to a variable
+    for ( let alertCategory of this.config.alertCategories ){
+      for ( let alert of alertCategory.alerts ){
+        obj.alerts[alert.id] = this.triggerSet.triggers.indexOf(alert.id) != -1
+      }
+    }
+    return obj
+  },
   methods    : {
-    seeIfIsChecked(alertId) {
-      if( this.triggerSet.triggers.indexOf(alertId) != -1 )
-        return true;
-      else
-        return false;
-    },
-
-    getData() {
-      return 'my data'
-    },
-
     onChange(isChecked, id) {
+      this.addOrRemoveAlertFromList(isChecked, id)
+      this.sortAndPublish()
+    },
+    changeAllChecks(isChecked) {
+      // Loop through our local alerts object and flip each one on or off
+      for ( let [key, alert] of Object.entries(this.alerts) ) {
+        this.alerts[key] = isChecked
+        this.addOrRemoveAlertFromList(isChecked, key)
+      }
+      this.sortAndPublish()
+    },
+    // Add or Remove a specific alert from the array of alerts this set is interested in
+    addOrRemoveAlertFromList(isChecked, id) {
       if(isChecked)
         this.triggerSet.triggers.push(id)
       else
         _.pull(this.triggerSet.triggers, id);
-      this.triggerSet.triggers.sort()
-      this.$emit('changed', this.triggerSet)
     },
-
-    changeAllChecks(turnOn) {
-      let ar = []
-      for ( let check of this.$refs.checkBoxes ){
-        if( turnOn ){
-          check.check()
-          ar.push(check.id )
-        }else
-          check.unCheck()
-      }
-      this.triggerSet.triggers = ar
+    // Sort the alerts into comparison order and notify the parent that we _may_ have changed
+    sortAndPublish() {
+      this.triggerSet.triggers.sort()
       this.$emit('changed', this.triggerSet)
     }
   }
@@ -52,7 +55,7 @@ export default {
       .category(v-for="category in config.alertCategories")
         .title {{category.title}}
         .flags
-          checkbox(v-for="(alert, i) in category.alerts" :key="i" :label="alert.txt" :label-is-after="true" :is-checked="seeIfIsChecked(alert.id)" v-on:changed="onChange" :id="alert.id" ref="checkBoxes" )
+          checkbox(v-for="(alert, i) in category.alerts" :key="i" :label="alert.txt" :label-is-after="true" v-model="alerts[alert.id]" :id="alert.id" @changed="onChange")
     .macros
       .btn(v-on:click="changeAllChecks(true)" ) Check all
       .btn(v-on:click="changeAllChecks(false)" ) Uncheck all

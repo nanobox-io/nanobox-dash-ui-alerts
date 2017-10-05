@@ -25,7 +25,7 @@ export default {
 
     save() {
       this.saveTriggerSetCb(this.triggerSet.id, this.triggerSetCopy, (data)=>{
-        if( data.error !== null ){
+        if( data.error != null ){
           console.log( "HANDLE THIS ERROR:" )
           console.log( data.error )
         }

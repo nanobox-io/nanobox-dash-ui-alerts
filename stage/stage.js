@@ -1,10 +1,10 @@
 require('nanobox-core-styles/scss/_base.scss')
 
-let dataShim = require("./data-shim.js")
-
-console.log( dataShim )
+import DataShim from "./data-shim.js"
 import alerts from '../src/main.js'
 import Vue from 'vue'
+
+let dataShim = new DataShim()
 
 // TODO : Convert this into webpacked component
 require("script-loader!../node_modules/shadow-icons/rel/app.js")
@@ -35,7 +35,7 @@ new Vue({
   el       : '#app',
   template : '<alerts :model="model" :callbacks="callbacks"/>',
   data     : {
-    model     : dataShim,
+    model     : dataShim.getData(),
     callbacks : callbacks,
     saveTriggerSetCb : ()=>{},
     deleteTriggerSet : ()=>{}
