@@ -1,11 +1,11 @@
 <script type="text/babel">
 import Categories  from './categories'
 import Receipients from './receipients'
-
+import {x} from 'lexi'
 export default {
   name: 'manage',
   props: ['config', 'triggerSet', 'saveTriggerSetCb'],
-  components:{Categories, Receipients},
+  components:{Categories, Receipients, x},
   data() {
     this.triggerSet.triggers.sort()
     return {
@@ -51,9 +51,7 @@ export default {
 
 <template lang="pug">
   .manage.blue-item(ref="manage")
-    .close(v-on:click="$emit('close')" )
-      img.shadow-icon(data-src="close-x" )
-      .txt Back
+    x.stretch(@click="$emit('close')") Back
     input(v-model="triggerSetCopy.name" )
     categories(:config="configCopy", :triggerSet="triggerSetCopy" v-on:changed="onChange"  ref="categories")
     receipients(:config="configCopy", :triggerSet="triggerSetCopy" v-on:changed="onChange" ref="recipients")

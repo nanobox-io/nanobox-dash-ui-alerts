@@ -1,13 +1,10 @@
 <script type="text/babel">
 import Receipient from './receipient'
-
+import {add} from 'lexi'
 export default {
   name       : 'receipients',
   props      : ['config', 'triggerSet'],
-  // ------------------------------------ Components
-  components : {
-    Receipient
-  },
+  components : {add, Receipient},
 
   // ------------------------------------ Methods
   methods:{
@@ -35,15 +32,11 @@ export default {
 <template lang="pug">
   .receipients
     receipient(v-for="(item, i) in triggerSet.receipients" :key="i" :config="item" v-on:delete="deleteReceipient(i)" v-on:changed="onReipientChange" )
-    .add-new(v-on:click="addReceipient" )
-      img.shadow-icon(data-src="circle-add")
-      .txt Add Receipients
+    add.add-new.circle(@click="addReceipient") Add Receipients
 </template>
 
 <style lang="scss" scoped>
   .receipients  {background:#DEE4E8; display: flex; padding:30px 30px 10px; justify-content: space-between; flex-wrap: wrap; box-sizing: content-box; margin-top:30px;
-    .add-new    {color:#034C66; font-size:15px; font-style: italic; display: flex; align-items: center; margin: 20px 0 15px; cursor: pointer;
-      .txt      {margin-left:7px; }
-    }
+    .add-new    {margin: 20px 0 15px; }
   }
 </style>

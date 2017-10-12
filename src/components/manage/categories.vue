@@ -24,7 +24,7 @@ export default {
     },
     changeAllChecks(isChecked) {
       // Loop through our local alerts object and flip each one on or off
-      for ( let [key, alert] of Object.entries(this.alerts) ) {
+      for ( var key in this.alerts ) {
         this.alerts[key] = isChecked
         this.addOrRemoveAlertFromList(isChecked, key)
       }
@@ -55,7 +55,8 @@ export default {
       .category(v-for="category in config.alertCategories")
         .title {{category.title}}
         .flags
-          checkbox(v-for="(alert, i) in category.alerts" :key="i" :label="alert.txt" :label-is-after="true" v-model="alerts[alert.id]" :id="alert.id" @changed="onChange")
+          checkbox(v-for="(alert, i) in category.alerts" :key="i" :label-is-after="true" v-model="alerts[alert.id]" :id="alert.id" @changed="onChange")
+            .label {{alert.txt}}
     .macros
       .btn(v-on:click="changeAllChecks(true)" ) Check all
       .btn(v-on:click="changeAllChecks(false)" ) Uncheck all

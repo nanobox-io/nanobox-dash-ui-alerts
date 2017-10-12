@@ -1,12 +1,12 @@
 <script type="text/babel">
-import {dropdown} from 'lexi'
+import {dropdown, x} from 'lexi'
 export default {
   name: 'receipient',
   props: ['config'],
   data:function() {
     return {selectedItem:""}
   },
-  components:{dropdown},
+  components:{dropdown, x},
   methods:{
 
     onTypeChange(val) {
@@ -19,7 +19,6 @@ export default {
     }
 
   },
-  mounted(){ castShadows(this.$el[0]); }
 }
 </script>
 
@@ -35,8 +34,7 @@ export default {
       .option(value="email-collaborators") Send email to all collaborators
       .option(value="text-collaborators") Send text to all collaborators
     input(type=text v-model="config.target" v-on:input="$emit('changed')")
-    .close(v-on:click="$emit('delete')")
-      img.shadow-icon(data-src="close-x")
+    x.close(@click="$emit('delete')")
 </template>
 
 <!--
